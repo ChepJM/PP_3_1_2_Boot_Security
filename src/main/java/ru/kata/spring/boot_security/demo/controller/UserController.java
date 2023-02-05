@@ -20,9 +20,10 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     public String index(Principal principal, Model model) {
-        model.addAttribute("user", userService.getUserByName(principal.getName()));
+        User user = userService.getUserByName(principal.getName());
+        model.addAttribute("user", user);
         return "user-info";
     }
 }

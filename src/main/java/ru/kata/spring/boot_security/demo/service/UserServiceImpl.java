@@ -50,9 +50,9 @@ public class UserServiceImpl implements UserDetailsService {
     public void saveUser(User user) {
         User existingUser = userRepository.findByUsername(user.getUsername());
 
-        if (existingUser != null) {
-            return;
-        }
+//        if (existingUser != null) {
+//            return;
+//        }
         user.setRoleList(Collections.singletonList(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);

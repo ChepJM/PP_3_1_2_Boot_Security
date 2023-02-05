@@ -5,16 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-<form th:method="GET" th:action="@{/save}" th:object="${user}">
+<form th:method="GET" th:action="@{/admin/save}" th:object="${user}">
     <input type="hidden" th:field="*{id}"/>
 
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name"/>
+    <label for="username">Name</label>
+    <input type="text" th:field="*{username}" id="username"/>
 
     <br>
 
     <label for="surname">Surname</label>
     <input type="text" th:field="*{secondName}" id="surname"/>
+
+    <br>
+
+    <label for="password">Password</label>
+    <input type="text" th:field="*{password}" id="password"/>
 
     <br>
 

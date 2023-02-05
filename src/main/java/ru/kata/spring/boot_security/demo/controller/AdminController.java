@@ -16,10 +16,10 @@ public class AdminController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("/")
+    @GetMapping
     public String index(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "index";
+        return "admin";
     }
 
     @GetMapping(value = "/add")
@@ -31,13 +31,13 @@ public class AdminController {
     @GetMapping(value = "/save")
     public String saveUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
     @GetMapping(value = "/delete")
     public String deleteUser(@RequestParam("id") Long id) {
         userService.deleteUserById(id);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
     @GetMapping(value = "/edit")
