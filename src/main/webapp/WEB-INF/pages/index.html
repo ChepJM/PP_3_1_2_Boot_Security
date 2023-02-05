@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Главная</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div>
+    <!--    <h3>${pageContext.request.userPrincipal.name}</h3>-->
+    <sec:authorize access="!isAuthenticated()">
+        <h4><a href="/login">Войти</a></h4>
+        <h4><a href="/registration">Зарегистрироваться</a></h4>
+    </sec:authorize>
+    <sec:authorize access="isAuthenticated()">
+        <h4><a href="/logout">Выйти</a></h4>
+    </sec:authorize>
+    <h4><a href="/user">Только для пользователя</a></h4>
+    <h4><a href="/admin">Только для админа</a></h4>
+</div>
+</body>
+</html>
