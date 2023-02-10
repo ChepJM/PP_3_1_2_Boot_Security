@@ -28,6 +28,13 @@
 
     <br>
 
+    <tr th:each="message : ${messages}">
+        <td th:text="${message}"> </td>
+        <br>
+    </tr>
+
+    <br>
+
     <input type="submit" value="Save user"/>
 </form>
 </body>
