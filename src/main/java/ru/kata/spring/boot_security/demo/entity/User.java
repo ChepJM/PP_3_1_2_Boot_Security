@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class User implements UserDetails {
     @Min(value = 1, message = "Возраст пользователя не должен быть менее 1 года")
     private int age;
 
+    @Column(name = "email")
+    private String email;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles"
     , joinColumns = @JoinColumn(name = "user_id")
@@ -43,12 +47,21 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String secondName, String password, int age, List<Role> roleList) {
+    public User(String username, String secondName, String password, int age, String email, List<Role> roleList) {
         this.username = username;
         this.secondName = secondName;
         this.password = password;
         this.age = age;
+        this.email = email;
         this.roleList = roleList;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getId() {
@@ -83,6 +96,13 @@ public class User implements UserDetails {
         return roleList;
     }
 
+    public String getRolesString() {
+        List<String> roleNames = new ArrayList<>();
+        for (Role role : roleList) {
+            roleNames.add(role.getRoleName().substring(5));
+        }
+        return String.join(" ", roleNames);
+    }
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }
@@ -95,6 +115,8 @@ public class User implements UserDetails {
                 ", secondName='" + secondName + '\'' +
                 ", password='" + password + '\'' +
                 ", age=" + age +
+                ", email='" + email + '\'' +
+                ", roleList=" + roleList +
                 '}';
     }
 
