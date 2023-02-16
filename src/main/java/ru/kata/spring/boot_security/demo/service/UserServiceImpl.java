@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserDetailsService {
 //        if (existingUser != null) {
 //            return;
 //        }
-        user.setRoleList(Collections.singletonList(new Role(1L, "ROLE_USER")));
+//        user.setRoleList(Collections.singletonList(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }

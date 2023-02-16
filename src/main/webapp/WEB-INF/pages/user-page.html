@@ -15,7 +15,11 @@
 <div class="container-fluid">
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <span class="navbar-brand">Admin</span>
+            <div class="navbar-brand">
+                <b><a th:text="${currentUser.getEmail()}"/></b>
+                <a>with roles:</a>
+                <a th:text="${currentUser.getRolesString()}"/>
+            </div>
             <a class="navbar-text" href="/logout">Logout</a>
         </div>
     </nav>

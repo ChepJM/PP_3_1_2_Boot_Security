@@ -24,6 +24,7 @@ public class UserController {
     public String index(Principal principal, Model model) {
         User user = userService.getUserByName(principal.getName());
         model.addAttribute("user", user);
+        model.addAttribute("currentUser", userService.getUserByName(principal.getName()));
         return "user-page";
     }
 }

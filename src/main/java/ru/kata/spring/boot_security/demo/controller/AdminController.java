@@ -5,7 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.entity.User;
+import ru.kata.spring.boot_security.demo.service.RoleServiceImpl;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/admin")
@@ -13,17 +16,16 @@ public class AdminController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private RoleServiceImpl roleService;
+
     @GetMapping
-    public String index(Model model) {
+    public String index(Principal principal, Model model) {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("newUser", new User());
+        model.addAttribute("currentUser", userService.getUserByName(principal.getName()));
+        model.addAttribute("roles", roleService.getAllRoles());
         return "admin-page";
-    }
-
-    @GetMapping(value = "/add")
-    public String addUser(Model model) {
-        model.addAttribute("user", new User());
-        return "user-edit";
     }
 
     @PostMapping
@@ -38,10 +40,10 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "/edit")
-    public String editUser(@RequestParam("id") Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-        return "user-edit";
+    @PutMapping
+    public String editUser(@ModelAttribute("user") User user) {
+        userService.saveUser(user);
+        return "redirect:/admin";
     }
 
 }

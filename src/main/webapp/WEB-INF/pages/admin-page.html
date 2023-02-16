@@ -15,7 +15,11 @@
 <div class="container-fluid">
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <span class="navbar-brand">Admin</span>
+            <div class="navbar-brand">
+                <b><a th:text="${currentUser.getEmail()}"/></b>
+                <a>with roles:</a>
+                <a th:text="${currentUser.getRolesString()}"/>
+            </div>
             <a class="navbar-text" href="/logout">Logout</a>
         </div>
     </nav>
@@ -70,8 +74,8 @@
                                             <th scope="col">Delete</th>
                                         </tr>
                                         </thead>
-                                        <tbody th:each="user : ${users}">
-                                        <tr>
+                                        <tbody>
+                                        <tr th:each="user : ${users}">
                                             <th scope="row"><span th:text="${user.id}"> ID </span></th>
                                             <td><span th:text="${user.username}"> First name </span></td>
                                             <td><span th:text="${user.secondName}"> Last name </span></td>
@@ -80,7 +84,8 @@
                                             <td><span th:text="${user.getRolesString()}"> Role </span></td>
                                             <td>
                                                 <button type="button" class="btn btn-info" data-bs-toggle="modal"
-                                                        data-bs-target="#editModal">Edit
+                                                        data-bs-target="#editModal"
+                                                        th:data-bs-target="${'#EditUser'+user.id}">Edit
                                                 </button>
                                             </td>
                                             <td>
@@ -88,67 +93,96 @@
                                                     <button type="submit" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
+                                            <!-- Modal -->
+                                            <div class="modal fade" th:id="${'EditUser'+user.id}" tabindex="-1"
+                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit
+                                                                user</h1>
+                                                            <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form id="editUser" class="container-fluid mb-2 "
+                                                                  th:action="@{/admin}" th:object="${user}"
+                                                                  th:method="PUT">
+                                                                <div class="modal-body col-6 text-center offset-3">
+                                                                    <label for="modalId"
+                                                                           class="form-label-bottom fw-bold ">ID</label>
+                                                                    <input class="form-control" type="text" id="modalId"
+                                                                           th:value="${user.id}" disabled>
+                                                                    <br>
+                                                                    <label for="modalFirstName"
+                                                                           class="form-label-bottom fw-bold ">First
+                                                                        name</label>
+                                                                    <input class="form-control" type="text"
+                                                                           placeholder="First name"
+                                                                           id="modalFirstName"
+                                                                           th:value="${user.username}">
+                                                                    <br>
+                                                                    <label for="modalLastName"
+                                                                           class="form-label-bottom fw-bold">Last
+                                                                        name</label>
+                                                                    <input class="form-control" type="text"
+                                                                           placeholder="Last name"
+                                                                           aria-label="default input example"
+                                                                           id="modalLastName"
+                                                                           th:value="${user.secondName}">
+                                                                    <br>
+                                                                    <label for="modalAge"
+                                                                           class="form-label-bottom fw-bold">Age</label>
+                                                                    <input class="form-control" type="number"
+                                                                           placeholder="Age"
+                                                                           aria-label="default input example"
+                                                                           id="modalAge"
+                                                                           th:value="${user.age}">
+                                                                    <br>
+                                                                    <label for="modalEmail"
+                                                                           class="form-label-bottom fw-bold">Email</label>
+                                                                    <input class="form-control" type="text"
+                                                                           placeholder="Email"
+                                                                           aria-label="default input example"
+                                                                           id="modalEmail"
+                                                                           th:value="${user.email}">
+                                                                    <br>
+                                                                    <label for="modalPassword"
+                                                                           class="form-label-bottom fw-bold">Password</label>
+                                                                    <input class="form-control" type="password"
+                                                                           placeholder="Password"
+                                                                           aria-label="default input example"
+                                                                           id="modalPassword"
+                                                                           th:value="${user.password}">
+                                                                    <br>
+                                                                    <label for="modalRole"
+                                                                           class="form-label-bottom fw-bold">Role</label>
+                                                                    <select class="form-select" multiple size="2"
+                                                                            aria-label="size 2 select example"
+                                                                            th:value="${user.roleList}" id="modalRole">
+                                                                        <option th:each="role: ${roles}"
+                                                                                th:value="${role.id}"
+                                                                                th:text="${role}"
+                                                                                th:selected="${user.roleList.contains(role)}">
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close
+                                                            </button>
+                                                            <button form="editUser" type="submit" class="btn btn-primary">Edit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="editModal" tabindex="-1"
-                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit
-                                                        user</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body col-6 text-center offset-3">
-                                                    <label for="modalId"
-                                                           class="form-label-bottom fw-bold ">ID</label>
-                                                    <input class="form-control" type="text" id="modalId" disabled>
-                                                    <br>
-                                                    <label for="modalFirstName" class="form-label-bottom fw-bold ">First
-                                                        name</label>
-                                                    <input class="form-control" type="text" placeholder="First name"
-                                                           id="modalFirstName">
-                                                    <br>
-                                                    <label for="modalLastName" class="form-label-bottom fw-bold">Last
-                                                        name</label>
-                                                    <input class="form-control" type="text" placeholder="Last name"
-                                                           aria-label="default input example" id="modalLastName">
-                                                    <br>
-                                                    <label for="modalAge"
-                                                           class="form-label-bottom fw-bold">Age</label>
-                                                    <input class="form-control" type="number" placeholder="Age"
-                                                           aria-label="default input example" id="modalAge">
-                                                    <br>
-                                                    <label for="modalEmail"
-                                                           class="form-label-bottom fw-bold">Email</label>
-                                                    <input class="form-control" type="text" placeholder="Email"
-                                                           aria-label="default input example" id="modalEmail">
-                                                    <br>
-                                                    <label for="modalPassword" class="form-label-bottom fw-bold">Password</label>
-                                                    <input class="form-control" type="password"
-                                                           placeholder="Password" aria-label="default input example"
-                                                           id="modalPassword">
-                                                    <br>
-                                                    <label for="modalRole"
-                                                           class="form-label-bottom fw-bold">Role</label>
-                                                    <select class="form-select" size="2" multiple
-                                                            aria-label="multiple select example" id="modalRole">
-                                                        <option selected>ADMIN</option>
-                                                        <option>USER</option>
-                                                    </select>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Close
-                                                    </button>
-                                                    <button type="button" class="btn btn-primary">Edit</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -175,18 +209,27 @@
                                                    th:field="*{age}" id="age">
                                             <br>
                                             <label for="email" class="form-label-bottom fw-bold">Email</label>
-                                            <input class="form-control" type="text" placeholder="Email"
+                                            <input class="form-control" type="text" autocomplete="new-email"
+                                                   placeholder="Email"
                                                    th:field="*{email}" id="email">
                                             <br>
                                             <label for="password" class="form-label-bottom fw-bold">Password</label>
-                                            <input class="form-control" type="password" placeholder="Password"
+                                            <input class="form-control" type="password" autocomplete="new-password"
+                                                   placeholder="Password"
                                                    th:field="*{password}" id="password">
                                             <br>
                                             <label for="role" class="form-label-bottom fw-bold">Role</label>
-                                            <select class="form-select" size="2" multiple
-                                                    aria-label="multiple select example" id="role">
-                                                <option selected>ADMIN</option>
-                                                <option>USER</option>
+                                            <!--                                            <select class="form-select" size="2" multiple-->
+                                            <!--                                                    aria-label="multiple select example" id="role">-->
+                                            <!--                                                <option selected>ADMIN</option>-->
+                                            <!--                                                <option>USER</option>-->
+                                            <!--                                            </select>-->
+                                            <select class="form-select" multiple size="2"
+                                                    aria-label="size 2 select example" th:field="*{roleList}" id="role">
+                                                <option th:each="role: ${roles}"
+                                                        th:value="${role.id}"
+                                                        th:text="${role}">
+                                                </option>
                                             </select>
                                             <br>
                                             <button type="submit" class="btn btn-success btn-lg">Add new user</button>
@@ -217,12 +260,12 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <th scope="row">2</th>
-                                    <td>admin</td>
-                                    <td>admin</td>
-                                    <td>35</td>
-                                    <td>admin@mail.ru</td>
-                                    <td>ADMIN USER</td>
+                                    <th scope="row"><span th:text="${currentUser.id}"> ID </span></th>
+                                    <td><span th:text="${currentUser.username}"> First name </span></td>
+                                    <td><span th:text="${currentUser.secondName}"> Last name </span></td>
+                                    <td><span th:text="${currentUser.age}"> Age </span></td>
+                                    <td><span th:text="${currentUser.email}"> Email </span></td>
+                                    <td><span th:text="${currentUser.getRolesString()}"> Roles </span></td>
                                 </tr>
                                 </tbody>
                             </table>
