@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -43,18 +43,21 @@ public class UserServiceImpl implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
     public void saveUser(User user) {
-        User existingUser = userRepository.findByUsername(user.getUsername());
+        User existingUser = userRepository.findByEmail(user.getEmail());
 
-//        if (existingUser != null) {
-//            return;
-//        }
-//        user.setRoleList(Collections.singletonList(new Role(1L, "ROLE_USER")));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        if ((existingUser == null) || (!user.getPassword().equals(existingUser.getPassword()))) {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
         userRepository.save(user);
     }
 
@@ -63,4 +66,6 @@ public class UserServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(email);
         return user;
     }
+
+
 }

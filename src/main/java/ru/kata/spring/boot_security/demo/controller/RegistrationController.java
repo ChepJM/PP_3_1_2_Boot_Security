@@ -8,6 +8,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.kata.spring.boot_security.demo.entity.Role;
 import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
@@ -24,6 +25,29 @@ public class RegistrationController {
     public String registration(Model model) {
         model.addAttribute("user", new User());
         return "registration";
+    }
+
+    @GetMapping("/addAdmin")
+    public String addAdmin() {
+        String username = "admin";
+        String secondName = "adminName";
+        String password = "12345";
+        int age = 14;
+        String email = "admin@mail.ru";
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(new Role("ROLE_ADMIN"));
+        roleList.add(new Role("ROLE_USER"));
+        User user = new User(
+                username,
+                secondName,
+                password,
+                age,
+                email,
+                roleList
+        );
+        userService.saveUser(user);
+
+        return "redirect:/";
     }
 
     @PostMapping("/registration")

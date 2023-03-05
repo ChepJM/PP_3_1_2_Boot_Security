@@ -34,10 +34,10 @@ public class User implements UserDetails {
     @Min(value = 1, message = "Возраст пользователя не должен быть менее 1 года")
     private int age;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_roles"
     , joinColumns = @JoinColumn(name = "user_id")
     , inverseJoinColumns = @JoinColumn(name = "role_id")

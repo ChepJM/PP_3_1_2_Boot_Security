@@ -282,11 +282,6 @@
                                                    th:field="*{password}" id="userPassword">
                                             <br>
                                             <label for="userRole" class="form-label-bottom fw-bold">Role</label>
-                                            <!--                                            <select class="form-select" size="2" multiple-->
-                                            <!--                                                    aria-label="multiple select example" id="role">-->
-                                            <!--                                                <option selected>ADMIN</option>-->
-                                            <!--                                                <option>USER</option>-->
-                                            <!--                                            </select>-->
                                             <select class="form-select" multiple size="2"
                                                     aria-label="size 2 select example" th:field="*{roleList}" id="userRole">
                                                 <option th:each="role: ${roles}"
